@@ -1,0 +1,1 @@
+cmd_Release/dlms_translator_utils_extension.node := ln -f "Release/obj.target/dlms_translator_utils_extension.node" "Release/dlms_translator_utils_extension.node" 2>/dev/null || (rm -rf "Release/dlms_translator_utils_extension.node" && cp -af "Release/obj.target/dlms_translator_utils_extension.node" "Release/dlms_translator_utils_extension.node")

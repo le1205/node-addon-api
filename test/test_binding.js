@@ -5,6 +5,20 @@ const assert = require("assert");
 assert(DLMSTranslatorUtilsExtension, "The expected function is undefined");
 const translator = new DLMSTranslatorUtilsExtension();
 translator.setSystemTitle("0937182202")
+function testSetSecurity(value) {
+  try {
+      translator.setSecurity(value);
+      console.log(`setSecurity with ${value} succeeded`);
+      // You might want to call another method here to verify the effect of SetSecurity
+  } catch (error) {
+      console.error(`setSecurity with ${value} failed: ${error.message}`);
+  }
+}
+
+testSetSecurity(1); // Test with a valid value
+testSetSecurity(256);
+translator.getSecurity();
+
 console.log("+++++++++++++++++", translator.getSystemTitle());
 // Replace these strings with actual test data
 const testData = "testtestData";
