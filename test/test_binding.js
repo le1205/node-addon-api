@@ -103,6 +103,6 @@ console.log("+++++++++++++", pdu.output, typeof pdu.output);
 
 var wp=translator.addWrapperFrame(16, 1, pdu.output, false);
 console.log("=====addWrapperFrame======", wp, pdu);
-// const buffer = Buffer.from(wp.output, 'hex');
-// var del=translator.delWrapperFrame(buffer);
-// console.log("=====delWrapperFrame======", del);
+const buffer = Buffer.from(wp.output, 'hex');
+var del=translator.delWrapperFrame(buffer);
+console.log("=====delWrapperFrame======", del);

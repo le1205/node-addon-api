@@ -270,13 +270,13 @@ Napi::Value DLMSTranslatorUtilsWrapper::DelWrapperFrame(const Napi::CallbackInfo
     // Check the number of arguments
     if (info.Length() != 1) {
         Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
-       return env.Null();
+        return env.Null();
     }
 
     // Ensure the argument is of buffer type
     if (!info[0].IsBuffer()) {
         Napi::TypeError::New(env, "Argument must be a buffer").ThrowAsJavaScriptException();
-       return env.Null();
+        return env.Null();
     }
 
     // Get the buffer argument
@@ -286,14 +286,16 @@ Napi::Value DLMSTranslatorUtilsWrapper::DelWrapperFrame(const Napi::CallbackInfo
     CGXByteBuffer data;
     data.Set(buffer.Data(), buffer.Length());
 
-    // Call the DelWrapperFrame function
+    // Call the DelWrapperFrame function to modify the data buffer
     translator.DelWrapperFrame(data);
-    std::string output;
-    // Optionally, you might want to return some data or status back to JavaScript
-    // For example, you can return an updated buffer or a success status
-    Napi::Object resultObj = Napi::Object::New(env);
-    resultObj.Set("output", Napi::String::New(env, output));
-    return resultObj;
+
+    // Create a new JavaScript buffer from the updated CGXByteBuffer
+    size_t updatedSize = data.GetSize();
+    Napi::Buffer<uint8_t> updatedBuffer = Napi::Buffer<uint8_t>::New(env, updatedSize);
+    memcpy(updatedBuffer.Data(), data.GetData(), updatedSize);
+
+    // Return the updated buffer
+    return updatedBuffer;
 }
 
 // AddWrapperFrame
