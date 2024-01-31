@@ -344,7 +344,7 @@ endif
 
 quiet_cmd_regen_makefile = ACTION Regenerating $@
 cmd_regen_makefile = cd $(srcdir); /home/legend/.nvm/versions/node/v21.6.1/lib/node_modules/npm/node_modules/node-gyp/gyp/gyp_main.py -fmake --ignore-environment "-Dlibrary=shared_library" "-Dvisibility=default" "-Dnode_root_dir=/home/legend/.cache/node-gyp/21.6.1" "-Dnode_gyp_dir=/home/legend/.nvm/versions/node/v21.6.1/lib/node_modules/npm/node_modules/node-gyp" "-Dnode_lib_file=/home/legend/.cache/node-gyp/21.6.1/<(target_arch)/node.lib" "-Dmodule_root_dir=/home/legend/Documents/newfolder/1/node-addon-api" "-Dnode_engine=v8" "--depth=." "-Goutput_dir=." "--generator-output=build" -I/home/legend/Documents/newfolder/1/node-addon-api/build/config.gypi -I/home/legend/.nvm/versions/node/v21.6.1/lib/node_modules/npm/node_modules/node-gyp/addon.gypi -I/home/legend/.cache/node-gyp/21.6.1/include/node/common.gypi "--toplevel-dir=." binding.gyp
-Makefile: $(srcdir)/../../../../.nvm/versions/node/v21.6.1/lib/node_modules/npm/node_modules/node-gyp/addon.gypi $(srcdir)/binding.gyp $(srcdir)/node_modules/node-addon-api/node_api.gyp $(srcdir)/build/config.gypi $(srcdir)/../../../../.cache/node-gyp/21.6.1/include/node/common.gypi
+Makefile: $(srcdir)/binding.gyp $(srcdir)/node_modules/node-addon-api/node_api.gyp $(srcdir)/../../../../.cache/node-gyp/21.6.1/include/node/common.gypi $(srcdir)/build/config.gypi $(srcdir)/../../../../.nvm/versions/node/v21.6.1/lib/node_modules/npm/node_modules/node-gyp/addon.gypi
 	$(call do_cmd,regen_makefile)
 
 # "all" is a concatenation of the "all" targets from all the included

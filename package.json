@@ -2,7 +2,8 @@
   "main": "lib/binding.js",
   "private": true,
   "dependencies": {
-    "node-addon-api": "^7.1.0"
+    "node-addon-api": "^7.1.0",
+    "xml2json": "^0.12.0"
   },
   "scripts": {
     "test": "node --napi-modules ./test/test_binding.js"

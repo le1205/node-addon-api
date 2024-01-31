@@ -21,8 +21,8 @@ class DLMSTranslatorUtilsWrapper : public Napi::ObjectWrap<DLMSTranslatorUtilsWr
   void SetSecurity(const Napi::CallbackInfo& info);
   Napi::Value GetAuthentication(const Napi::CallbackInfo& info);
   void SetAuthentication(const Napi::CallbackInfo& info);
-  void DelWrapperFrame(const Napi::CallbackInfo& info);
-  void AddWrapperFrame(const Napi::CallbackInfo& info);
+  Napi::Value DelWrapperFrame(const Napi::CallbackInfo& info);
+  Napi::Value AddWrapperFrame(const Napi::CallbackInfo& info);
   Napi::Value IsCipheredCmd(const Napi::CallbackInfo& info);
   Napi::Value DecryptPdu(const Napi::CallbackInfo& info);
   Napi::Value EncryptPdu(const Napi::CallbackInfo& info);
@@ -264,19 +264,19 @@ Napi::Value DLMSTranslatorUtilsWrapper::GetAuthentication(const Napi::CallbackIn
 }
 
 // DelWrapperFrame
-void DLMSTranslatorUtilsWrapper::DelWrapperFrame(const Napi::CallbackInfo& info) {
+Napi::Value DLMSTranslatorUtilsWrapper::DelWrapperFrame(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
     // Check the number of arguments
     if (info.Length() != 1) {
         Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
-        return;
+       return env.Null();
     }
 
     // Ensure the argument is of buffer type
     if (!info[0].IsBuffer()) {
         Napi::TypeError::New(env, "Argument must be a buffer").ThrowAsJavaScriptException();
-        return;
+       return env.Null();
     }
 
     // Get the buffer argument
@@ -288,25 +288,28 @@ void DLMSTranslatorUtilsWrapper::DelWrapperFrame(const Napi::CallbackInfo& info)
 
     // Call the DelWrapperFrame function
     translator.DelWrapperFrame(data);
-
+    std::string output;
     // Optionally, you might want to return some data or status back to JavaScript
     // For example, you can return an updated buffer or a success status
+    Napi::Object resultObj = Napi::Object::New(env);
+    resultObj.Set("output", Napi::String::New(env, output));
+    return resultObj;
 }
 
 // AddWrapperFrame
-void DLMSTranslatorUtilsWrapper::AddWrapperFrame(const Napi::CallbackInfo& info) {
+Napi::Value DLMSTranslatorUtilsWrapper::AddWrapperFrame(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
     // Check the number of arguments
     if (info.Length() < 3 || info.Length() > 4) {
         Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
-        return;
+        
     }
 
     // Extract arguments and perform type checking
     if (!info[0].IsNumber() || !info[1].IsNumber() || !info[2].IsString()) {
         Napi::TypeError::New(env, "Wrong arguments").ThrowAsJavaScriptException();
-        return;
+     
     }
 
     unsigned long sourceAddress = info[0].As<Napi::Number>().Uint32Value();
@@ -317,12 +320,18 @@ void DLMSTranslatorUtilsWrapper::AddWrapperFrame(const Napi::CallbackInfo& info)
     // Correct function call
     if (info.Length() == 3) {
         translator.AddWrapperFrame(sourceAddress, destAddress, data.c_str(), output);
+        
     } else if (info.Length() == 4) {
         bool addSpaces = info[3].As<Napi::Boolean>().Value();
         translator.AddWrapperFrame(sourceAddress, destAddress, data.c_str(), output, addSpaces);
+     
     }
 
     // You might want to return the output or handle it as needed
+      Napi::Object resultObj = Napi::Object::New(env);
+      resultObj.Set("output", Napi::String::New(env, output));
+      return resultObj;
+    
 }
 
 // DecryptPdu
