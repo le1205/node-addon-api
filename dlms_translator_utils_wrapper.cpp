@@ -369,14 +369,16 @@ Napi::Value DLMSTranslatorUtilsWrapper::EncryptPdu(const Napi::CallbackInfo& inf
   Napi::HandleScope scope(env);
 
   // Check for the correct number of arguments and types
-  if (info.Length() < 3 || !info[0].IsString() || !info[1].IsString() || !info[2].IsBoolean()) {
-    Napi::TypeError::New(env, "String, String, and Boolean expected").ThrowAsJavaScriptException();
+  if (info.Length() < 2 || !info[0].IsString() || !info[1].IsBoolean()) {
+    Napi::TypeError::New(env, "String and Boolean expected").ThrowAsJavaScriptException();
     return env.Null();
   }
 
   std::string data = info[0].As<Napi::String>().Utf8Value();
+  bool addSpaces = info[1].As<Napi::Boolean>().Value();
+
+  // Create an output string internally
   std::string output; // Output will be set by EncryptPdu function
-  bool addSpaces = info[2].As<Napi::Boolean>().Value();
 
   // Call EncryptPdu function
   int result = translator.EncryptPdu(data.c_str(), output, addSpaces);
@@ -388,6 +390,7 @@ Napi::Value DLMSTranslatorUtilsWrapper::EncryptPdu(const Napi::CallbackInfo& inf
 
   return resultObj;
 }
+
 
 // XmlToPdu
 Napi::Value DLMSTranslatorUtilsWrapper::XmlToPdu(const Napi::CallbackInfo& info) {

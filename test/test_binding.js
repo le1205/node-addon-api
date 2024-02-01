@@ -102,7 +102,9 @@ var pdu=translator.xmlToPdu(xml.output,false);
 console.log("+++++++++++++", pdu.output, typeof pdu.output);
 
 var wp=translator.addWrapperFrame(16, 1, pdu.output, false);
-console.log("=====addWrapperFrame======", wp, pdu);
+console.log("=====addWrapperFrame======", wp);
+var pduEC = translator.encryptPdu(pdu.output,false);
+console.log("=====pduEC======", pduEC);
 const buffer = Buffer.from(wp.output, 'hex');
 var del=translator.delWrapperFrame(buffer);
 console.log("=====delWrapperFrame======", del);
